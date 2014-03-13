@@ -29,6 +29,12 @@ a {
     text-decoration: none;
 }
 
+.home {
+    position: absolute;
+    left: 40px;
+    top: 20px;
+}
+
 .back {
     position: absolute;
     left: 20%;
