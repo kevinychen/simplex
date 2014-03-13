@@ -20,19 +20,11 @@ exports.rules = function(req, res) {
 // The following functions all assume the team is logged in
 
 exports.home = function(req, res) {
-    model.getSections(function(error, sections) {
-        model.canView(req.user.name, function(error, canView) {
-            // Only take sections that this team can see
-            var filteredSections = Array();
-            for (var i = 0; i < sections.length; i++) {
-                if (canView.indexOf(sections[i]) != -1) {
-                    filteredSections.push(sections[i]);
-                }
-            }
-            res.render('home.ejs', {
-                team: req.user,
-                sections: filteredSections
-            });
+    model.canView(req.user.name, function(error, canView) {
+        // only take sections that this team can see
+        res.render('home.ejs', {
+            team: req.user,
+            sections: canView
         });
     });
 };

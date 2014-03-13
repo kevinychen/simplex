@@ -22,12 +22,9 @@ exports.getSections = getSections;
 // teamname: "team1"
 // callback(error, ["lev1", "lev2", ...])
 exports.canView = function(teamname, callback) {
-    console.log('teamname: ' + teamname);
     root.child('teams/' + teamname + '/canView').once('value', function(canViewSnapshot) {
         getSections(function(err, sections) {
             var canViewIndex = canViewSnapshot.val() || 0;
-            console.log('index: ' + canViewIndex);
-            console.log('sections: ' + sections);
             var canView = Array();
             for (var i = 0; i < sections.length; i++) {
                 if (i <= canViewIndex) {
