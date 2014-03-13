@@ -22,9 +22,9 @@ app.use(express.cookieParser());
 app.use(express.session({secret: 'SIMPLEX'}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(config.router);
 app.use(app.router);
-app.use(express.static(path.join(__dirname, 'public')));
 
 passport.use(config.strategy);
 passport.serializeUser(function(user, done) { 

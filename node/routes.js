@@ -21,7 +21,19 @@ exports.rules = function(req, res) {
 
 exports.home = function(req, res) {
     model.getSections(function(error, sections) {
-        res.render('home.ejs', {team: req.user, sections: sections});
+        model.canView(req.user.name, function(error, canView) {
+            // Only take sections that this team can see
+            var filteredSections = Array();
+            for (var i = 0; i < sections.length; i++) {
+                if (canView.indexOf(sections[i]) != -1) {
+                    filteredSections.push(sections[i]);
+                }
+            }
+            res.render('home.ejs', {
+                team: req.user,
+                sections: filteredSections
+            });
+        });
     });
 };
 

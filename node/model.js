@@ -12,9 +12,30 @@ exports.getTeam = function(teamname, callback) {
 };
 
 // callback(error, ["sec1", "sec2", ...])
-exports.getSections = function(callback) {
+function getSections(callback) {
     root.child('sections').once('value', function(sectionsSnapshot) {
         callback(false, sectionsSnapshot.val() || []);
+    });
+};
+exports.getSections = getSections;
+
+// teamname: "team1"
+// callback(error, ["lev1", "lev2", ...])
+exports.canView = function(teamname, callback) {
+    console.log('teamname: ' + teamname);
+    root.child('teams/' + teamname + '/canView').once('value', function(canViewSnapshot) {
+        getSections(function(err, sections) {
+            var canViewIndex = canViewSnapshot.val() || 0;
+            console.log('index: ' + canViewIndex);
+            console.log('sections: ' + sections);
+            var canView = Array();
+            for (var i = 0; i < sections.length; i++) {
+                if (i <= canViewIndex) {
+                    canView.push(sections[i]);
+                }
+            }
+            callback(false, canView);
+        });
     });
 };
 
@@ -28,18 +49,18 @@ exports.getPuzzles = function(section, callback) {
 
 // puzzle: "puz1"
 // callback(error, [puzzle object])
-exports.getPuzzle = function(puzzle, callback) {
+function getPuzzle(puzzle, callback) {
     root.child('pages/' + puzzle).once('value', function(puzzleSnapshot) {
         callback(false, puzzleSnapshot.val());
     });
 };
+exports.getPuzzle = getPuzzle;
 
 // teamname: "team1", puzzle: "puz1", answer: "answer"
 // callback(error, {puzzle: [puzzle object], correct: true, message: "Good job!"})
 exports.submitAnswer = function(teamname, puzzle, answer, callback) {
-    root.child('pages/' + puzzle).once('value', function(puzzleSnapshot) {
-        var puzzleObj = puzzleSnapshot.val();
-        if (!puzzle) {
+    getPuzzle(puzzle, function(error, puzzleObj) {
+        if (!puzzleObj) {
             callback(false, {
                 puzzle: puzzleObj,
                 correct: false,
@@ -56,6 +77,10 @@ exports.submitAnswer = function(teamname, puzzle, answer, callback) {
             root.child('teams/' + teamname + '/solved/' + puzzle).set({
                 time: Date.now()
             });
+            // If is meta, update the sections that this team can view.
+            if (puzzleObj.hasOwnProperty('unlocks')) {
+                root.child('teams/' + teamname + '/canView').set(puzzleObj.unlocks);
+            }
             callback(true, {
                 puzzle: puzzleObj,
                 correct: true,

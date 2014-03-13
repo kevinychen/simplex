@@ -6,12 +6,29 @@ exports.port = 8080;
 
 // Router for handling security/permissions
 exports.router = function(req, res, next) {
+    var parts = req.url.split('/');
+    var page = parts[1];
     if (req.user) {
-        // TODO check if this team has access to this file
-        next();
+        var privatePages = ['section', 'puzzle'];
+        if (privatePages.indexOf(page) != -1) {
+            var section = parts[2];
+            model.canView(req.user.name, function(error, canView) {
+                if (canView.indexOf(section) != -1) {
+                    next();
+                } else {
+                    res.type('txt').send('401 Not authorized');
+                }
+            });
+        } else {
+            next();
+        }
     } else {
-        // TODO check if public has access to this file
-        next();
+        var publicURLs = ['login', 'logout', 'rules'];
+        if (publicURLs.indexOf(page) != -1) {
+            next();
+        } else {
+            res.redirect('/login');
+        }
     }
 };
 
