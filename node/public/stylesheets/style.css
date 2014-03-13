@@ -113,5 +113,10 @@ a {
 .content iframe {
     width: 60%;
     height: 800px;
+    background-color: #cccccc;
+}
+
+.content img {
+    width: 300px;
 }
 
