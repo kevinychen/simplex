@@ -1,5 +1,6 @@
 var Firebase = require('firebase');
 var root = new Firebase('https://simplex.firebaseIO.com');
+root.auth('VFB3L04HY1QgP4Idyh5iFd2hKcESbSPTayFliizO');
 
 // teamname: "team1"
 // callback(error, [team object])
