@@ -2,6 +2,10 @@ var Firebase = require('firebase');
 var root = new Firebase('https://simplex.firebaseIO.com');
 root.auth('VFB3L04HY1QgP4Idyh5iFd2hKcESbSPTayFliizO');
 
+// map from team name to last submission time
+var submissionTimeMap = Object();
+const MIN_SUBMISSION_DELAY_TIME = 30000;  // milliseconds
+
 // teamname: "team1"
 // callback(error, [team object])
 exports.getTeam = function(teamname, callback) {
@@ -70,6 +74,21 @@ exports.getPuzzle = getPuzzle;
 // callback(error, {puzzle: [puzzle object], correct: true, message: "Good job!"})
 exports.submitAnswer = function(teamname, puzzle, answer, callback) {
     getPuzzle(puzzle, function(error, puzzleObj) {
+        // Make sure the team is not submitting too frequently
+        var currentTime = Date.now();
+        if (submissionTimeMap.hasOwnProperty(teamname) &&
+            submissionTimeMap[teamname] > currentTime - MIN_SUBMISSION_DELAY_TIME) {
+                callback(false, {
+                    puzzle: puzzleObj,
+                    correct: false,
+                    message: "Too frequent submissions. Please wait."
+                });
+                return;
+            } else {
+                submissionTimeMap[teamname] = currentTime;
+            }
+
+        // Check that the contest is running
         running(function(error, isRunning) {
             if (!isRunning) {
                 callback(false, {
@@ -92,7 +111,7 @@ exports.submitAnswer = function(teamname, puzzle, answer, callback) {
             } else {
                 // Correct answer!
                 root.child('teams/' + teamname + '/solved/' + puzzle).set({
-                    time: Date.now()
+                    time: currentTime
                 });
                 // If is meta, update the sections that this team can view.
                 if (puzzleObj.hasOwnProperty('unlocks')) {
