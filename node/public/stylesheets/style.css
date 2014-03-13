@@ -80,3 +80,25 @@ input[type="submit"]:hover {
     background-color: #b9b9b9;
     cursor: pointer;
 }
+
+.content {
+    text-align: center;
+}
+
+.content h1 {
+    margin: 0px;
+    padding: 20px;
+    font-size: 32px;
+}
+
+.content h5 {
+    margin: 0px;
+    padding: 10px;
+    font-size: 18px;
+}
+
+.content iframe {
+    width: 1000px;
+    height: 800px;
+}
+

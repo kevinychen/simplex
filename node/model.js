@@ -25,3 +25,24 @@ exports.getPuzzles = function(section, callback) {
         callback(false, puzzlesSnapshot.val() || []);
     });
 };
+
+// puzzle: "puz1"
+// callback(error, [puzzle object])
+exports.getPuzzle = function(puzzle, callback) {
+    root.child('pages/' + puzzle).once('value', function(puzzleSnapshot) {
+        callback(false, puzzleSnapshot.val());
+    });
+};
+
+// puzzle: "puz1", answer: "answer"
+// callback(error, {puzzle: [puzzle object], correct: true, message: "Good job!"})
+exports.submitAnswer = function(puzzle, answer, callback) {
+    // TODO check the answer and update database if correct
+    root.child('pages/' + puzzle).once('value', function(puzzleSnapshot) {
+        callback(false, {
+            puzzle: puzzleSnapshot.val(),
+            correct: true,
+            message: "Good job!"
+        })
+    });
+};

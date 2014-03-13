@@ -47,6 +47,8 @@ app.get('/logout', routes.logout);
 app.get('/rules', routes.rules);
 app.get('/home', routes.home);
 app.get('/section/:section', routes.section);
+app.get('/puzzle/:section/:puzzle', routes.puzzle);
+app.post('/puzzle/:section/:puzzle', routes.submit);
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log("Express server listening on port " + app.get('port'));

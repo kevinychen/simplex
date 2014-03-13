@@ -25,11 +25,34 @@ exports.home = function(req, res) {
 
 exports.section = function(req, res) {
     model.getPuzzles(req.params.section, function(error, puzzles) {
-        console.log('puzzles:' + puzzles);
         res.render('section.ejs', {
             team: req.user,
             section: req.params.section,
             puzzles: puzzles
+        });
+    });
+};
+
+exports.puzzle = function(req, res) {
+    model.getPuzzle(req.params.puzzle, function(error, puzzle) {
+        res.render('puzzle.ejs', {
+            team: req.user,
+            section: req.params.section,
+            puzzle: req.params.puzzle,
+            url: puzzle.url,
+            message: ''
+        });
+    });
+};
+
+exports.submit = function(req, res) {
+    model.submitAnswer(req.params.puzzle, req.body.answer, function(error, result) {
+        res.render('puzzle.ejs', {
+            team: req.user,
+            section: req.params.section,
+            puzzle: req.params.puzzle,
+            url: result.puzzle.url,
+            message: result.message
         });
     });
 };

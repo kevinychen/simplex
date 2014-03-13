@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    </head>
+    <body>
+        <div class="content">
+            <h5>Team <%= team.name %></h5>
+            <p><%= message %></p>
+            <form method="post" action="/puzzle/<%= section %>/<%= puzzle %>">
+                Answer: <input type="text" class="answer" name="answer"/>
+                <input type="submit" value="Submit"/>
+            </form>
+            <iframe src="<%= url %>"></iframe>
+            <h5><a href="/logout">Logout</a></h5>
+        </div>
+    </body>
+    <script>
+        $('.answer').focus();
+    </script>
+</html>
