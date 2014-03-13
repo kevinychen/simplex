@@ -6,12 +6,13 @@
     <body>
         <div class="container">
             <img src="/images/logo.jpg" alt="">
-            <h1>SIMPLEX</h1>
+            <h1><%= section %></h1>
             <h5>Team <%= team.name %></h5>
-            <% for (var i = 0; i < sections.length; i++) { %>
-            <p><a href="/section/<%= sections[i] %>"><%= sections[i] %></a></p>
+            <% for (var i = 0; i < puzzles.length; i++) { %>
+            <p><a href="/puzzle/<%= section %>/<%= puzzles[i] %>"><%= puzzles[i] %></a></p>
             <% } %>
             <h5><a href="/logout">Logout</a></h5>
         </div>
     </body>
 </html>
+

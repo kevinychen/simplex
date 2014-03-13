@@ -1,3 +1,4 @@
+var model = require('./model');
 
 exports.login = function(req, res) {
     res.render('login.ejs');
@@ -17,5 +18,18 @@ exports.rules = function(req, res) {
 // The following functions all assume the team is logged in
 
 exports.home = function(req, res) {
-    res.render('home.ejs', {team: req.user});
+    model.getSections(function(error, sections) {
+        res.render('home.ejs', {team: req.user, sections: sections});
+    });
+};
+
+exports.section = function(req, res) {
+    model.getPuzzles(req.params.section, function(error, puzzles) {
+        console.log('puzzles:' + puzzles);
+        res.render('section.ejs', {
+            team: req.user,
+            section: req.params.section,
+            puzzles: puzzles
+        });
+    });
 };
