@@ -40,6 +40,14 @@ exports.canView = function(teamname, callback) {
     });
 };
 
+// callback(error, true)
+function running(callback) {
+    root.child('running').once('value', function(runningSnapshot) {
+        callback(false, runningSnapshot.val());
+    });
+};
+exports.running = running;
+
 // section: "sec1"
 // callback(error, ["puz1", "puz2", ...])
 exports.getPuzzles = function(section, callback) {
@@ -61,32 +69,41 @@ exports.getPuzzle = getPuzzle;
 // callback(error, {puzzle: [puzzle object], correct: true, message: "Good job!"})
 exports.submitAnswer = function(teamname, puzzle, answer, callback) {
     getPuzzle(puzzle, function(error, puzzleObj) {
-        if (!puzzleObj) {
-            callback(false, {
-                puzzle: puzzleObj,
-                correct: false,
-                message: "Invalid puzzle."
-            });
-        } else if (puzzleObj.answer !== answer) {
-            callback(false, {
-                puzzle: puzzleObj,
-                correct: false,
-                message: "Incorrect answer."
-            });
-        } else {
-            // Correct answer!
-            root.child('teams/' + teamname + '/solved/' + puzzle).set({
-                time: Date.now()
-            });
-            // If is meta, update the sections that this team can view.
-            if (puzzleObj.hasOwnProperty('unlocks')) {
-                root.child('teams/' + teamname + '/canView').set(puzzleObj.unlocks);
+        running(function(error, isRunning) {
+            if (!isRunning) {
+                callback(false, {
+                    puzzle: puzzleObj,
+                    correct: false,
+                    message: "The Hunt has ended."
+                });
+            } else if (!puzzleObj) {
+                callback(false, {
+                    puzzle: puzzleObj,
+                    correct: false,
+                    message: "Invalid puzzle."
+                });
+            } else if (puzzleObj.answer !== answer) {
+                callback(false, {
+                    puzzle: puzzleObj,
+                    correct: false,
+                    message: "Incorrect answer."
+                });
+            } else {
+                // Correct answer!
+                root.child('teams/' + teamname + '/solved/' + puzzle).set({
+                    time: Date.now()
+                });
+                // If is meta, update the sections that this team can view.
+                if (puzzleObj.hasOwnProperty('unlocks')) {
+                    root.child('teams/' + teamname + '/canView').set(
+                            puzzleObj.unlocks);
+                }
+                callback(true, {
+                    puzzle: puzzleObj,
+                    correct: true,
+                    message: "Congratulations! That is correct!"
+                });
             }
-            callback(true, {
-                puzzle: puzzleObj,
-                correct: true,
-                message: "Congratulations! That is correct!"
-            });
-        }
+        });
     });
 };
