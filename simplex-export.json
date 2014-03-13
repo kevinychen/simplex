@@ -1,0 +1,25 @@
+{
+  "teams" : {
+    "kyc" : {
+      "solved" : {
+        "Sample" : {
+          "time" : 1394743837669
+        }
+      },
+      "canView" : 1,
+      "password" : "code"
+    }
+  },
+  "puzzles" : {
+    "Segment" : [ "Pictures", "DNA" ],
+    "Point" : [ "Sample" ]
+  },
+  "sections" : [ "Point", "Segment", "Triangle", "Pyramid", "SIMPLEX" ],
+  "pages" : {
+    "Sample" : {
+      "unlocks" : 1,
+      "url" : "http://www.wikipedia.org",
+      "answer" : "wiki"
+    }
+  }
+}
