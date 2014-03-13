@@ -34,15 +34,33 @@ exports.getPuzzle = function(puzzle, callback) {
     });
 };
 
-// puzzle: "puz1", answer: "answer"
+// teamname: "team1", puzzle: "puz1", answer: "answer"
 // callback(error, {puzzle: [puzzle object], correct: true, message: "Good job!"})
-exports.submitAnswer = function(puzzle, answer, callback) {
-    // TODO check the answer and update database if correct
+exports.submitAnswer = function(teamname, puzzle, answer, callback) {
     root.child('pages/' + puzzle).once('value', function(puzzleSnapshot) {
-        callback(false, {
-            puzzle: puzzleSnapshot.val(),
-            correct: true,
-            message: "Good job!"
-        })
+        var puzzleObj = puzzleSnapshot.val();
+        if (!puzzle) {
+            callback(false, {
+                puzzle: puzzleObj,
+                correct: false,
+                message: "Invalid puzzle."
+            });
+        } else if (puzzleObj.answer !== answer) {
+            callback(false, {
+                puzzle: puzzleObj,
+                correct: false,
+                message: "Incorrect answer."
+            });
+        } else {
+            // Correct answer!
+            root.child('teams/' + teamname + '/solved/' + puzzle).set({
+                time: Date.now()
+            });
+            callback(true, {
+                puzzle: puzzleObj,
+                correct: true,
+                message: "Congratulations! That is correct!"
+            });
+        }
     });
 };

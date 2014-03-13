@@ -1,5 +1,7 @@
 var model = require('./model');
 
+const INVALID_PUZZLE_URL = 'http://rlv.zcache.com/404_error_memory_file_not_found_jigsaw_puzzle-r81117e109ee742e6a06397f39b392e4b_ambtl_8byvr_512.jpg';
+
 exports.login = function(req, res) {
     res.render('login.ejs');
 };
@@ -39,19 +41,20 @@ exports.puzzle = function(req, res) {
             team: req.user,
             section: req.params.section,
             puzzle: req.params.puzzle,
-            url: puzzle.url,
+            url: puzzle ? puzzle.url : INVALID_PUZZLE_URL,
             message: ''
         });
     });
 };
 
 exports.submit = function(req, res) {
-    model.submitAnswer(req.params.puzzle, req.body.answer, function(error, result) {
+    model.submitAnswer(req.user.name, req.params.puzzle,
+            req.body.answer, function(error, result) {
         res.render('puzzle.ejs', {
             team: req.user,
             section: req.params.section,
             puzzle: req.params.puzzle,
-            url: result.puzzle.url,
+            url: result.puzzle ? result.puzzle.url : INVALID_PUZZLE_URL,
             message: result.message
         });
     });
