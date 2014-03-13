@@ -29,6 +29,19 @@ a {
     text-decoration: none;
 }
 
+.back {
+    position: absolute;
+    left: 20%;
+    top: 80px;
+    min-width: 100px;
+}
+
+.logout {
+    position: absolute;
+    right: 40px;
+    top: 20px;
+}
+
 .container {
     position: absolute;
     left: 50%;
@@ -66,7 +79,7 @@ a {
     padding: 4px;
 }
 
-input[type="submit"] {
+.button {
     padding: 7px;
     color: #fff;
     background-color: #898989;
@@ -76,7 +89,7 @@ input[type="submit"] {
     margin-bottom: 6px;
 }
 
-input[type="submit"]:hover {
+.button:hover {
     background-color: #b9b9b9;
     cursor: pointer;
 }
@@ -98,7 +111,7 @@ input[type="submit"]:hover {
 }
 
 .content iframe {
-    width: 1000px;
+    width: 60%;
     height: 800px;
 }
 

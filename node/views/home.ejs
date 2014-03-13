@@ -4,14 +4,16 @@
         <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
     </head>
     <body>
+        <div class="logout">
+            <a class="button" href="/logout">Logout</a>
+        </div>
         <div class="container">
-            <img src="/images/logo.jpg" alt="">
+            <a href="/home"><img src="/images/logo.jpg" alt=""></a>
             <h1>SIMPLEX</h1>
             <h5>Team <%= team.name %></h5>
             <% for (var i = 0; i < sections.length; i++) { %>
             <p><a href="/section/<%= sections[i] %>"><%= sections[i] %></a></p>
             <% } %>
-            <h5><a href="/logout">Logout</a></h5>
         </div>
     </body>
 </html>
