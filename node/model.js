@@ -1,3 +1,4 @@
+var fs = require('fs');
 var Firebase = require('firebase');
 var root = new Firebase('https://simplex.firebaseIO.com');
 root.auth('VFB3L04HY1QgP4Idyh5iFd2hKcESbSPTayFliizO');
@@ -6,16 +7,23 @@ root.auth('VFB3L04HY1QgP4Idyh5iFd2hKcESbSPTayFliizO');
 var submissionTimeMap = Object();
 const MIN_SUBMISSION_DELAY_TIME = 30000;  // milliseconds
 
+function log(message) {
+    fs.appendFile('simplex.log', message);
+}
+
 // teamname: "team1"
 // password: "password"
 // callback(error, {message: "Success!"})
 exports.register = function(teamname, password, callback) {
+    log("REGISTER time: " + Date.now() + ", team: " + teamname + ", result: ");
     root.child('teams').once('value', function(teamsSnapshot) {
         if (teamsSnapshot.hasChild(teamname)) {
             callback(true, {message: "That team name already exists."});
+            log("DUPLICATE NAME\n");
         } else {
             teamsSnapshot.ref().child(teamname).set({password: password});
             callback(false, {message: "Success!"});
+            log("SUCCESS\n");
         }
     });
 };
@@ -112,9 +120,11 @@ exports.solved = function(teamname, puzzle, callback) {
 // teamname: "team1", puzzle: "puz1", answer: "answer"
 // callback(error, {puzzle: [puzzle object], correct: true, message: "Good job!"})
 exports.submitAnswer = function(teamname, puzzle, answer, callback) {
+    var currentTime = Date.now();
+    log("SUBMIT time: " + currentTime + ", team: " + teamname +
+            ", puzzle: " + puzzle + ", answer: " + answer + ", result: ");
     getPuzzle(puzzle, function(error, puzzleObj) {
         // Make sure the team is not submitting too frequently
-        var currentTime = Date.now();
         if (submissionTimeMap.hasOwnProperty(teamname) &&
             submissionTimeMap[teamname] > currentTime - MIN_SUBMISSION_DELAY_TIME) {
                 callback(false, {
@@ -122,6 +132,7 @@ exports.submitAnswer = function(teamname, puzzle, answer, callback) {
                     correct: false,
                     message: "Too frequent submissions. Please wait."
                 });
+                log("TOO FREQUENT SUBMISSION\n");
                 return;
             } else {
                 submissionTimeMap[teamname] = currentTime;
@@ -135,18 +146,21 @@ exports.submitAnswer = function(teamname, puzzle, answer, callback) {
                     correct: false,
                     message: "The Hunt has ended."
                 });
+                log("HUNT HAS ENDED\n");
             } else if (!puzzleObj) {
                 callback(false, {
                     puzzle: puzzleObj,
                     correct: false,
                     message: "Invalid puzzle."
                 });
+                log("INVALID PUZZLE\n");
             } else if (puzzleObj.answer !== answer) {
                 callback(false, {
                     puzzle: puzzleObj,
                     correct: false,
                     message: "Incorrect answer."
                 });
+                log("INCORRECT\n");
             } else {
                 // Correct answer!
                 root.child('teams/' + teamname + '/solved/' + puzzle).set({
@@ -162,6 +176,7 @@ exports.submitAnswer = function(teamname, puzzle, answer, callback) {
                     correct: true,
                     message: "Congratulations! That is correct!"
                 });
+                log("CORRECT!\n");
             }
         });
     });
