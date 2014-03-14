@@ -2,6 +2,24 @@ var model = require('./model');
 
 const INVALID_PUZZLE_URL = 'http://rlv.zcache.com/404_error_memory_file_not_found_jigsaw_puzzle-r81117e109ee742e6a06397f39b392e4b_ambtl_8byvr_512.jpg';
 
+exports.preregister = function(req, res) {
+    res.render('register.ejs', {message: ''});
+};
+
+exports.register = function(req, res) {
+    var teamname = req.body.username;
+    var password = req.body.password;
+    if (!teamname.match(/^[A-Za-z][A-Za-z0-9_]*$/)) {
+        res.render('register.ejs', {message: 'Invalid team name.'});
+    } else if (password !== req.body.confirmpassword) {
+        res.render('register.ejs', {message: 'Passwords do not match.'});
+    } else {
+        model.register(teamname, password, function(error, result) {
+            res.render('register.ejs', {message: result.message});
+        });
+    }
+};
+
 exports.login = function(req, res) {
     res.render('login.ejs');
 };

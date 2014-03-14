@@ -5,9 +5,10 @@
     </head>
     <body>
         <div class="container">
-            <form method="post" action="/login">
+            <form method="post" action="/register">
                 <a href="/login"><img src="/images/logo.jpg" alt=""></a>
-                <h1>SIMPLEX</h1>
+                <h1>Register</h1>
+                <p><%= message %></p>
                 <table>
                     <tr>
                         <td>Team name:</td>
@@ -17,15 +18,18 @@
                         <td>Password:</td>
                         <td><input type="password" name="password"></td>
                     </tr>
+                    <tr>
+                        <td>Confirm:</td>
+                        <td><input type="password" name="confirmpassword"></td>
+                    </tr>
                 </table>
-                <input type="submit" class="button" value="login">
+                <input type="submit" class="button" value="register">
             </form>
-            <p>&bull; teams of up to 6</p>
-            <p>&bull; register <a href="/register">here</a></p>
-            <p>or <a href="/rules">read the rules...</a></p>
+            <p><a href="/login">Back to login...</a></p>
         </div>
         <script>
             $(".username").focus();
         </script>
     </body>
 </html>
+

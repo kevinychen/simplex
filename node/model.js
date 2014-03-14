@@ -7,6 +7,20 @@ var submissionTimeMap = Object();
 const MIN_SUBMISSION_DELAY_TIME = 30000;  // milliseconds
 
 // teamname: "team1"
+// password: "password"
+// callback(error, {message: "Success!"})
+exports.register = function(teamname, password, callback) {
+    root.child('teams').once('value', function(teamsSnapshot) {
+        if (teamsSnapshot.hasChild(teamname)) {
+            callback(true, {message: "That team name already exists."});
+        } else {
+            teamsSnapshot.ref().child(teamname).set({password: password});
+            callback(false, {message: "Success!"});
+        }
+    });
+};
+
+// teamname: "team1"
 // callback(error, [team object])
 exports.getTeam = function(teamname, callback) {
     root.child('teams/' + teamname).once('value', function(teamSnapshot) {

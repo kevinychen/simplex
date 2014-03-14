@@ -23,7 +23,7 @@ exports.router = function(req, res, next) {
             next();
         }
     } else {
-        var publicURLs = ['login', 'logout', 'rules'];
+        var publicURLs = ['register', 'login', 'logout', 'rules'];
         if (publicURLs.indexOf(page) != -1) {
             next();
         } else {
