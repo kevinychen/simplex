@@ -84,6 +84,14 @@ function getPuzzle(puzzle, callback) {
 };
 exports.getPuzzle = getPuzzle;
 
+// teamname: "team1", puzzle: "puz1"
+// callback(error, true);
+exports.solved = function(teamname, puzzle, callback) {
+    root.child('teams/' + teamname + '/solved/').once('value', function(solvedSnapshot) {
+        callback(false, solvedSnapshot.hasChild(puzzle));
+    });
+};
+
 // teamname: "team1", puzzle: "puz1", answer: "answer"
 // callback(error, {puzzle: [puzzle object], correct: true, message: "Good job!"})
 exports.submitAnswer = function(teamname, puzzle, answer, callback) {

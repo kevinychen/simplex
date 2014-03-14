@@ -58,13 +58,16 @@ exports.section = function(req, res) {
 };
 
 exports.puzzle = function(req, res) {
-    model.getPuzzle(req.params.puzzle, function(error, puzzle) {
-        res.render('puzzle.ejs', {
-            team: req.user,
-            section: req.params.section,
-            puzzle: req.params.puzzle,
-            url: puzzle ? puzzle.url : INVALID_PUZZLE_URL,
-            message: ''
+    var puzzle = req.params.puzzle;
+    model.getPuzzle(puzzle, function(error, puzzleObj) {
+        model.solved(req.user.name, puzzle, function(error, solved) {
+            res.render('puzzle.ejs', {
+                team: req.user,
+                section: req.params.section,
+                puzzle: puzzle,
+                url: puzzleObj ? puzzleObj.url : INVALID_PUZZLE_URL,
+                message: solved ? "SOLVED: " + puzzleObj.answer : ""
+            });
         });
     });
 };
