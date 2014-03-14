@@ -21,6 +21,23 @@ exports.register = function(teamname, password, callback) {
 };
 
 // teamname: "team1"
+// callback(error, ["member1", "member2", ...])
+function getMembers(teamname, callback) {
+    root.child('teams/' + teamname + '/members').once('value', function(membersSnapshot) {
+        callback(false, membersSnapshot.val() || []);
+    });
+};
+exports.getMembers = getMembers;
+
+// teamname: "team1"
+// members: ["member1", "member2", ...]
+// callback(error, ["member1", "member2", ...])
+exports.setMembers = function(teamname, members, callback) {
+    root.child('teams/' + teamname + '/members').set(members);
+    getMembers(teamname, callback);
+};
+
+// teamname: "team1"
 // callback(error, [team object])
 exports.getTeam = function(teamname, callback) {
     root.child('teams/' + teamname).once('value', function(teamSnapshot) {

@@ -9,7 +9,7 @@ exports.preregister = function(req, res) {
 exports.register = function(req, res) {
     var teamname = req.body.username;
     var password = req.body.password;
-    if (!teamname.match(/^[A-Za-z][A-Za-z0-9_]*$/)) {
+    if (!teamname || !teamname.match(/^[A-Za-z][A-Za-z0-9_]*$/)) {
         res.render('register.ejs', {message: 'Invalid team name.'});
     } else if (password !== req.body.confirmpassword) {
         res.render('register.ejs', {message: 'Passwords do not match.'});
@@ -18,6 +18,30 @@ exports.register = function(req, res) {
             res.render('register.ejs', {message: result.message});
         });
     }
+};
+
+exports.members = function(req, res) {
+    model.getMembers(req.user.name, function(error, members) {
+        res.render('members.ejs', {team: req.user, members: members});
+    });
+};
+
+exports.setmembers = function(req, res) {
+    // Change dictionary of {member1: member1, ...}
+    // to [member1, member2, ...]
+    var members = Array();
+    for (var i = 0; i < 6; i++) {
+        if (req.body.hasOwnProperty('member' + (i + 1))) {
+            var member = req.body['member' + (i + 1)];
+            if (member) {
+                members[i] = member;
+            }
+        }
+    }
+    // Update the database with new team members
+    model.setMembers(req.user.name, members, function(error, members) {
+        res.render('members.ejs', {team: req.user, members: members});
+    });
 };
 
 exports.login = function(req, res) {

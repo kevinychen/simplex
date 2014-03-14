@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+    </head>
+    <body>
+        <div class="home">
+            <a class="button" href="/home">Home</a>
+        </div>
+        <div class="logout">
+            <a class="button" href="/logout">Logout</a>
+        </div>
+        <div class="container">
+            <form method="post" action="/members">
+                <a href="/home"><img src="/images/logo.jpg" alt=""></a>
+                <h5><a href="/members">Team <%= team.name %></a></h5>
+                <% for (var i = 0; i < 6; i++) { %>
+                Member <%= (i + 1) %> <input type="text" class="member<%= (i + 1) %>" name="member<%= (i + 1) %>" value="<%= members[i] || '' %>"/>
+                <% } %>
+                <br/>
+                <input class="button" type="submit" value="Save"/>
+            </form>
+        </div>
+        <script>
+            $(".member1").focus();
+        </script>
+    </body>
+</html>
+
+

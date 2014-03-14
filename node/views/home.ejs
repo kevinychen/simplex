@@ -5,7 +5,7 @@
     </head>
     <body>
         <div class="home">
-            <a class="button" href="/home">Home</a>
+            <a class="button" href="/members">Edit team members</a>
         </div>
         <div class="logout">
             <a class="button" href="/logout">Logout</a>
@@ -13,7 +13,7 @@
         <div class="container">
             <a href="/home"><img src="/images/logo.jpg" alt=""></a>
             <h1>SIMPLEX</h1>
-            <h5>Team <%= team.name %></h5>
+            <h5><a href="/members">Team <%= team.name %></a></h5>
             <% for (var i = 0; i < sections.length; i++) { %>
             <p><a href="/section/<%= sections[i] %>"><%= sections[i] %></a></p>
             <% } %>

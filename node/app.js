@@ -39,6 +39,8 @@ app.configure('development', function() {
 app.get('/', routes.home);
 app.get('/register', routes.preregister);
 app.post('/register', routes.register);
+app.get('/members', routes.members);
+app.post('/members', routes.setmembers);
 app.get('/login', routes.login);
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/home',

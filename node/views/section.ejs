@@ -13,7 +13,7 @@
         <div class="container">
             <a href="/home"><img src="/images/logo.jpg" alt=""></a>
             <h1><%= section %></h1>
-            <h5>Team <%= team.name %></h5>
+            <h5><a href="/members">Team <%= team.name %></a></h5>
             <% for (var i = 0; i < puzzles.length; i++) { %>
             <p><a href="/puzzle/<%= section %>/<%= puzzles[i] %>"><%= puzzles[i] %></a></p>
             <% } %>
