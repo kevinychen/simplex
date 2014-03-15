@@ -13,16 +13,19 @@ function log(message) {
 
 // teamname: "team1"
 // password: "password"
-// callback(error, {message: "Success!"})
+// callback(error, {success: true, message: "Success!"})
 exports.register = function(teamname, password, callback) {
     log("REGISTER time: " + Date.now() + ", team: " + teamname + ", result: ");
     root.child('teams').once('value', function(teamsSnapshot) {
         if (teamsSnapshot.hasChild(teamname)) {
-            callback(true, {message: "That team name already exists."});
+            callback(true, {
+                success: false,
+                message: "That team name already exists."
+            });
             log("DUPLICATE NAME\n");
         } else {
             teamsSnapshot.ref().child(teamname).set({password: password});
-            callback(false, {message: "Success!"});
+            callback(false, {success: true, message: "Success!"});
             log("SUCCESS\n");
         }
     });

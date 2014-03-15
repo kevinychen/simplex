@@ -46,6 +46,11 @@ app.post('/login', passport.authenticate('local', {
     successRedirect: '/home',
     failureRedirect: '/login'
 }));
+// First login: redirect to add members list.
+app.post('/firstlogin', passport.authenticate('local', {
+    successRedirect: '/members',
+    failureRedirect: '/login'  // should never fail
+}));
 app.get('/logout', routes.logout);
 
 app.get('/rules', routes.rules);

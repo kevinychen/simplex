@@ -15,7 +15,11 @@ exports.register = function(req, res) {
         res.render('register.ejs', {message: 'Passwords do not match.'});
     } else {
         model.register(teamname, password, function(error, result) {
-            res.render('register.ejs', {message: result.message});
+            if (result.success) {
+                res.redirect(307, '/firstlogin');  // 307 copies req.body
+            } else {
+                res.render('register.ejs', {message: result.message});
+            }
         });
     }
 };
@@ -40,7 +44,7 @@ exports.setmembers = function(req, res) {
     }
     // Update the database with new team members
     model.setMembers(req.user.name, members, function(error, members) {
-        res.render('members.ejs', {team: req.user, members: members});
+        res.redirect('/home');
     });
 };
 
