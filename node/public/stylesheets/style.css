@@ -17,7 +17,7 @@ body {
     font-family: MuseoSans;
     font-size: 18px;
     color: #444;
-    background-color: #999999;
+    background-color: #d8d8d8;
 }
 
 p {
@@ -57,7 +57,9 @@ a {
     height: 530px;
     margin: -150px 0 0 -150px;
     text-align: center;
-    background-color: #a9a9a9;
+    background-color: #c2c2c2;
+    -webkit-box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 .container h1 {
@@ -88,11 +90,12 @@ a {
 .button {
     padding: 7px;
     color: #fff;
-    background-color: #898989;
+    background-color: #a4a4a4;
     width: 80px;
     border: none;
     margin-top: 6px;
     margin-bottom: 6px;
+    border-radius: 5px;
 }
 
 .button:hover {
@@ -102,6 +105,8 @@ a {
 
 .content {
     text-align: center;
+    -webkit-box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
 .content h1 {
