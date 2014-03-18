@@ -171,6 +171,15 @@ exports.submitAnswer = function(teamname, puzzle, answer, callback) {
                 });
                 // If is meta, update the sections that this team can view.
                 if (puzzleObj.hasOwnProperty('unlocks')) {
+                    if (puzzleObj.unlocks == 'victory') {
+                        callback(true, {
+                            puzzle: puzzleObj,
+                            correct: true,
+                            message: "Congratulations! You have completed the hunt!"
+                        });
+                        log("VICTORY!\n");
+                        return;
+                    }
                     root.child('teams/' + teamname + '/canView').set(
                             puzzleObj.unlocks);
                 }

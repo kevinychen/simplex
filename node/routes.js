@@ -9,7 +9,7 @@ exports.preregister = function(req, res) {
 exports.register = function(req, res) {
     var teamname = req.body.username;
     var password = req.body.password;
-    if (!teamname || !teamname.match(/^[A-Za-z][A-Za-z0-9_]*$/)) {
+    if (!teamname || !teamname.match(/^[A-Za-z][A-Za-z0-9_ ]*$/)) {
         res.render('register.ejs', {message: 'Invalid team name.'});
     } else if (password !== req.body.confirmpassword) {
         res.render('register.ejs', {message: 'Passwords do not match.'});
